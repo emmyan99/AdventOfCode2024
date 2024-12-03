@@ -1,4 +1,3 @@
-# regex mul\(\d\,\d\)
 import re
 
 def main():
