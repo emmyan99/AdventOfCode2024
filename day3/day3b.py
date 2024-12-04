@@ -3,15 +3,31 @@ import re
 def main():
     with open('input.txt') as f:
         input = f.read()
-    #print(input)
+    
+    to_sum = []
 
-    dont_index = input.find("don't()")
-    do_index = input.find("do()")
+    while(input):
+        dont_index = input.find("don't()")
+
+        if dont_index != -1:
+            to_sum = mulFunc(input[:dont_index], to_sum)
+            input = input[dont_index:]
+            do_index = input.find("do()")
+            if do_index != -1:
+                input = input[do_index+len("do()"):]
+            else:
+                input = ""
+        else:
+            to_sum = mulFunc(input, to_sum)
+            input = ""
+
+
+    print(sum(to_sum))
 
 
 def mulFunc(input, to_sum):
     x = re.findall("mul[\(\[]\d+,\d+[\)]", input)
-    #print(x)
+    # print(x)
 
     for expr in x:
         expr = expr[3:]
