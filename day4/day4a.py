@@ -1,36 +1,86 @@
 def main():
-    input = []
+    puzzle_input = []
     with open('input.txt') as f:
         for line in f:
-            input.append(list(line.strip()))
-        print(input)
+            puzzle_input.append(list(line.strip()))
+        print(puzzle_input)
 
-    word = "xmas"
     #word counter
     wc = 0
 
-    for row in range(len(input)):
-        for col in range(len(input[0])):
-            if input[row][col] == "X":
-                amount_found = check_neighbours(row, col, "M")
-                wc += amount_found
+    for row in range(len(puzzle_input)):
+        for col in range(len(puzzle_input[0])):
+            if puzzle_input[row][col] == "X":
+                wc = check_neighbours(puzzle_input, row, col, wc)
 
     print(wc)
 
 #need2 catch outisde of index error
-def check_neighbours(row, col, nletter):
-    amount_found = 0 #unsure
-    # ugly and hard coded for corner X for now >:(
-    if input[row][col+1] == nletter:
-        #use word[next letter to find] recursively
-        print("yipii")
-    if input[row+1][col] == nletter:
-        pass
-    if input[row+1][col+1] == nletter:
-        pass
-    return amount_found
-# once S is found, amount_found can be incremented? 
+def check_neighbours(puzzle_input, row, col, wc):
+
+    # go down
+    if len(puzzle_input) > row+3: 
+        if puzzle_input[row+1][col] == "M":
+            if puzzle_input[row+2][col] == "A":
+                if puzzle_input[row+3][col] == "S":
+                    wc += 1
+
+        # go right down diagonal
+        if len(puzzle_input[0]) > col+3:
+            if puzzle_input[row+1][col+1] == "M":
+                if puzzle_input[row+2][col+2] == "A":
+                    if puzzle_input[row+3][col+3] == "S":
+                        wc += 1
+
+        # go left down diagonal
+        if col-3 > -1:
+            if puzzle_input[row+1][col-1] == "M":
+                if puzzle_input[row+2][col-2] == "A":
+                    if puzzle_input[row+3][col-3] == "S":
+                        wc += 1
 
 
+                
+    # go up
+    if row-3 >= 0:
+        if puzzle_input[row-1][col] == "M":
+            if puzzle_input[row-2][col] == "A":
+                if puzzle_input[row-3][col] == "S":
+                    wc += 1
+        
+        # go up right diagonal
+        if len(puzzle_input) > col+3:
+            if puzzle_input[row-1][col+1] == "M":
+                if puzzle_input[row-2][col+2] == "A":
+                    if puzzle_input[row-3][col+3] == "S":
+                        wc += 1
+
+        # go up left diagonal
+        if col-3 >= 0:
+            if puzzle_input[row-1][col-1] == "M":
+                if puzzle_input[row-2][col-2] == "A":
+                    if puzzle_input[row-3][col-3] == "S":
+                        wc += 1
+
+
+
+    # go right
+    if len(puzzle_input[0]) > col+3:
+        if puzzle_input[row][col+1] == "M":
+            if puzzle_input[row][col+2] == "A":
+                if puzzle_input[row][col+3] == "S":
+                    wc += 1
+
+    # go left
+    if col-3 >= 0:
+        if puzzle_input[row][col-1] == "M":
+            if puzzle_input[row][col-2] == "A":
+                if puzzle_input[row][col-3] == "S":
+                    wc += 1
+                
+    return wc 
+
+
+    
 if __name__ == '__main__':
     main()
