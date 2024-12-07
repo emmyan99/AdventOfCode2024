@@ -9,6 +9,7 @@ def main():
     rules = puzzle_input[:newline_index] 
     updates = puzzle_input[newline_index+1:]
 
+#todo; make rules into dict instead
     rules = [rule.strip().split("|") for rule in rules]
     updates = [update.strip() for update in updates]
     for i in range(len(updates)):
