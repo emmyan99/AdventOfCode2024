@@ -1,6 +1,4 @@
 def main():
-    rules = []
-    updates = []
     puzzle_input = []
     with open('input.txt') as f:
         for line in f:
@@ -8,21 +6,20 @@ def main():
 
     newline_index = puzzle_input.index('\n')
             
-    rules_list = puzzle_input[:newline_index] 
-    updates = puzzle_input[newline_index+1:]  
+    rules = puzzle_input[:newline_index] 
+    updates = puzzle_input[newline_index+1:]
 
-    rules_list = [rule.strip() for rule in rules_list]
+    rules = [rule.strip().split("|") for rule in rules]
     updates = [update.strip() for update in updates]
-    
-    rules = {}
-    for i in range(len(rules_list)):
-        rules_list[i] = rules_list[i].split("|")
-        rules[rules_list[i][0]] = rules_list[i][1]
-        #print(rules_list[i][0] + " must come before " + rules_list[i][1])
+    for i in range(len(updates)):
+        updates[i] = updates[i].replace(",", "")
 
     correct_order = []
     correct_order = handle_updates(updates, rules, correct_order)
 
+    print(rules)
+    print('\n')
+    print(updates)
 
 def handle_updates(updates, rules, correct_order): 
 
@@ -30,14 +27,31 @@ def handle_updates(updates, rules, correct_order):
         start = 0
         end = 2
 
-        while len(line) > end:
-            line = ''.join(char for char in line if char != ',')
-            #print(line)
-            print(line[start:end])
+        while len(line) > start:
+            #print(line[start:end])
+            for rule in rules:
+                if line[start:end] == rule[0]:
+                    print(line[start:end] + " must come before " + rule[1])
+                    if line.find(rule[1]) != -1:
+                        print(rule[1], "is also in the list!")
+                        line = handle_rule(line, rule[0], rule[1])
             start += 2
             end += 2
 
-            
+
+    return correct_order
+
+
+def handle_rule(line, before, after):
+    print(line)
+    before_index = line.index(before)
+    after_index = line.index(after)
+
+    #if after_index < before_index:
+
+
+    print(before_index, after_index)
+
     
 if __name__ == '__main__':
     main()
