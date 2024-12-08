@@ -36,37 +36,47 @@ def main():
 
 def handle_updates(updates, rules, mid_numbers): 
 
-    corrected_updates  = []    
+    corrected_updates  = []   
+    
     for line in updates:
-        valid_line = True
+        #valid_line = True # PART 1
+        corrected = False
         for number in line:
 
             if number in rules:
                 # PART 1:
-                if not check_order(line, number, rules):
-                    valid_line = False
-                    break
-
-        if valid_line:
-            pass
-            #print("line" +  str(line) + " is valid ")
-            # PART 1:
-            #mid_numbers.append(line[int(len(line)/2)])
-            #print(mid_numbers)
-        else:
-            # PART 2:
-            corrected_line = correct_order(line, number, rules)
-            #todo: mid number append ist
+                #if not check_order(line, number, rules):
+                    #valid_line = False
+                    #break
+                
+                while not (check_order(line, number, rules)):
+                    corrected_line = correct_order(line, number, rules)
+                    corrected = True
+                
+        if corrected:
             corrected_updates.append(corrected_line)
+            print("corrected line: " + str(corrected_line))
+            print("corrected updates: " + str(corrected_updates))
+    
+    print(f"Total corrected lines: {len(corrected_updates)}")
+    for line in corrected_updates:
+        mid_numbers.append(line[int(len(line)//2)])
+        #print(mid_numbers)
+
+
+        # PART 1:
+        #if valid_line:
+            #print("line" +  str(line) + " is valid ")
+            #mid_numbers.append(line[int(len(line)/2)])
+        print(mid_numbers)
 
 
     return mid_numbers
 
 def correct_order(line, key, rules):
-    print("handling line" + str(line))
+    print("handling line " + str(line))
     for value in rules[key]:
         if value in line:
-            print(key, value)
             value_index = line.index(value)
             key_index = line.index(key)
             # print(str(value) + " is at " + str(value_index) + " in line " + str(line))
@@ -76,7 +86,6 @@ def correct_order(line, key, rules):
                 print("swapping " + str(value) + " and key: " + str(key))
                 line[key_index] = value
                 line[value_index] = key
-    print(line)
     return line
 
 def check_order(line, key, rules):
@@ -84,11 +93,10 @@ def check_order(line, key, rules):
         if value in line:
             value_index = line.index(value)
             key_index = line.index(key)
-            #print(str(value) + " is at " + str(value_index) + " in line " + str(line))
-            
+
             # key should be before value
             if key_index > value_index:
-                #print(str(key) + "comes after" + str(value) + "in line" + str(line))
+                print(str(key) + " comes after " + str(value) + " in line " + str(line))
                 return False
             
     return True
