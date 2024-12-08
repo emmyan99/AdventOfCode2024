@@ -1,8 +1,5 @@
 def main():
 
-    #TODO: use recursion for part b, swap then check order until done
-
-
     rules_list = []
     puzzle_input = []
     with open('input.txt') as f:
