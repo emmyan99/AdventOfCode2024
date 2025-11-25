@@ -1,11 +1,13 @@
 from enum import Enum
 import numpy as np
 
+
 class Direction(Enum):
     UP = '^'
     DOWN = 'v'
     LEFT = '<'
     RIGHT = '>'
+
 
 def main ():
     map_ = []
@@ -19,15 +21,21 @@ def main ():
     steps = 1
     locations = []
     exited = False
+    # run guard walk sim once, to find his path
     while not exited:
-        steps, location, direction, exited = take_step(steps, location, direction, exited, map_, locations)
+        steps, location, direction, exited, locations = take_step(steps, location, direction, exited, map_, locations)
+
+    for possible_obstacle_location in locations:
+        # create one map for each possible obstacle location (only placed on the path that the guard would walk usually)
+        modified_map = map_.copy()
+        modified_map[possible_obstacle_location[0]][possible_obstacle_location[1]] = '#'
+        # take steps until duplicate locations found in locations or until exited
+        # if exited -> not viable location for obstalce
+        # if not exited -> viable location for obstacle
+
         
+    # print(steps)
 
-    # horizontal and vertical counter?
-    # if about to build a square -> found a spot for an obstacle
-    # 
-
-    print(steps)
 
 def find_guard(map_):
     for row in range(len(map_)):
@@ -67,7 +75,7 @@ def take_step(steps, location, direction, exited, map_, locations):
 
     if out_of_bounds(new_location, map_):
         exited = True
-        return steps, location, direction, exited
+        return steps, location, direction, exited, locations
     elif map_[new_location[0]][new_location[1]] == OBSTACLE:
         #print("Obstacle found at " + str(new_location[0]) + " " + str(new_location[1]))
         dir_tuple = (direction[0], direction[1])
@@ -80,13 +88,14 @@ def take_step(steps, location, direction, exited, map_, locations):
         if not visited: steps += 1
         location = new_location
 
-    return steps, location, direction, exited
+    return steps, location, direction, exited, locations
 
 
 def out_of_bounds(location, map_):
     if location[0] > (len(map_)-1) or location[0] < 0 or location[1] > (len(map_)-1) or location[1] < 0:
         return True
     return False
+
 
 if __name__ == '__main__':
     main()
